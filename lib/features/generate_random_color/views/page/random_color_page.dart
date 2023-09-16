@@ -28,7 +28,10 @@ class _RandomColorPageState extends State<RandomColorPage> {
 
   @override
   Widget build(BuildContext context) {
-    _randomColorProvider = Provider.of<RandomColorProvider>(context, listen: false);
+    _randomColorProvider = Provider.of<RandomColorProvider>(
+      context,
+      listen: false,
+    );
 
     return GestureDetector(
       onTap: isLocal ? localColorGenerator : remoteColorGenerator,
@@ -70,7 +73,10 @@ class _RandomColorPageState extends State<RandomColorPage> {
                     ],
                   ),
                 ),
-                const Text("Hello There!!")
+                Text(
+                  "Hello There!!\n#${_randomColorProvider?.getRandomColor?.color?.hex ?? 'ffffff'}",
+                  textAlign: TextAlign.center,
+                )
               ],
             ),
           ),
@@ -90,14 +96,16 @@ class _RandomColorPageState extends State<RandomColorPage> {
 
   /// Generates a random local color and updates the UI.
   void localColorGenerator() {
-    LocalServices.generateRandomColor(
-      _randomColorProvider as RandomColorProvider,
-    );
-    if (_randomColorProvider?.getRandomColor != null) {
-      final String colorValue = "0xff${_randomColorProvider?.getRandomColor?.color?.hex}";
-      setState(() {
-        whiteColor = int.parse(colorValue);
-      });
+    if (_randomColorProvider != null) {
+      LocalServices.generateRandomColor(
+        _randomColorProvider as RandomColorProvider,
+      );
+      if (_randomColorProvider?.getRandomColor != null) {
+        final String colorValue = "0xff${_randomColorProvider?.getRandomColor?.color?.hex}";
+        setState(() {
+          whiteColor = int.parse(colorValue);
+        });
+      }
     }
   }
 
@@ -106,27 +114,29 @@ class _RandomColorPageState extends State<RandomColorPage> {
     setState(() {
       isGeneratingColor = true;
     });
-    await RemoteServices.generateRandomColor(
-      _randomColorProvider as RandomColorProvider,
-    ).then(
-      (value) {
-        if (value.success) {
-          if (_randomColorProvider?.getRandomColor != null) {
-            final String colorValue = "0xff${_randomColorProvider?.getRandomColor?.color?.hex}";
+    if (_randomColorProvider != null) {
+      await RemoteServices.generateRandomColor(
+        _randomColorProvider as RandomColorProvider,
+      ).then(
+        (value) {
+          if (value.success) {
+            if (_randomColorProvider?.getRandomColor != null) {
+              final String colorValue = "0xff${_randomColorProvider?.getRandomColor?.color?.hex}";
+              setState(() {
+                whiteColor = int.parse(colorValue);
+                isGeneratingColor = false;
+              });
+            }
+          } else {
             setState(() {
-              whiteColor = int.parse(colorValue);
               isGeneratingColor = false;
             });
+            Scaffold.of(context).showBottomSheet(
+              (context) => Text(value.message),
+            );
           }
-        } else {
-          setState(() {
-            isGeneratingColor = false;
-          });
-          Scaffold.of(context).showBottomSheet(
-            (context) => Text(value.message),
-          );
-        }
-      },
-    );
+        },
+      );
+    }
   }
 }
