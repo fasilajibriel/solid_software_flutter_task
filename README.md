@@ -24,15 +24,15 @@ This Flutter app is a simple mobile application that generates a random color an
 
 1. Clone this repository to your local machine using:
 
-git clone https://github.com/fasilajibriel/solid_software_flutter_task
+```git clone https://github.com/fasilajibriel/solid_software_flutter_task```
 
 2. Navigate to the project directory:
 
-cd solid_software_flutter_task
+```cd solid_software_flutter_task```
 
 3. Install the required dependencies:
 
-flutter pub get
+```flutter pub get```
 
 ### Usage
 
@@ -40,7 +40,7 @@ flutter pub get
 
 2. Run the app:
 
-flutter run
+```flutter run```
 
 3. Once the app is running, tap the shuffle button or anywhere on the background to generate a random color and set it as the background.
 
@@ -56,13 +56,13 @@ If you'd like to contribute to this project, please follow these guidelines:
 
 2. Create a new branch for your feature or bug fix: 
 
-git checkout -b feature/your-feature-name
+```git checkout -b feature/your-feature-name```
 
 3. Make your changes and commit them with descriptive commit messages.
 
 4. Push your changes to your fork:
 
-git push origin feature/your-feature-name
+```git push origin feature/your-feature-name```
 
 5. Create a Pull Request against the `main` branch of this repository.
 
